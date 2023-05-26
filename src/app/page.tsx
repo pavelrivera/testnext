@@ -34,7 +34,7 @@ export default function Home() {
   const ENDPOINT_ACCESSKEY='7227d246704ce3ee8e345f4137819b14';
 
   const url_allsymbols = `${ENDPOINT_URL}/symbols?access_key=${ENDPOINT_ACCESSKEY}`;
-  const url_convert = `${ENDPOINT_URL}/convert?access_key=${ENDPOINT_ACCESSKEY}`;
+  const url_convert = `${ENDPOINT_URL}/latest?access_key=${ENDPOINT_ACCESSKEY}`;
   
 
   useEffect(() => {
@@ -75,15 +75,37 @@ export default function Home() {
   };
 
   const handleClickConvert = () => {
+    
     if(to!=null && from!=null)
     {
-      const urlfetch= `${url_convert}&from=${from}&to=${to}&amount=${amount}`;
-      fetch(`${urlfetch}`)
+      //const urlfetch= `${url_convert}&from=${from}&to=${to}&amount=${amount}`;
+      setLoading(true);
+      fetch(`${url_convert}`)
           .then((response) => response.json())
           .then((data) => {
             if(data.success)
             {
-              setResult(data.result);
+              var json_data = data.rates;
+              var result = [];
+
+              var vfrom=0;
+              var vto=0;
+              for(var i in json_data)
+              {
+                result.push([i, json_data [i]]);
+                if(i==from)
+                  vfrom=json_data [i];
+
+                if(i==to)
+                  vto=json_data [i];  
+              }
+              
+              var v1= (amount*vfrom) - (amount*vto); 
+              var v2= amount-v1;
+              var vrate= v2/amount;
+
+              setResult(v2);
+              setRate(vrate);
               setError(null);
             }
             else
@@ -96,6 +118,9 @@ export default function Home() {
             setFrom(null);
             setTo(null);
           })
+          .finally(() => {
+            setLoading(false);
+          });
     }
   };
 
@@ -156,7 +181,7 @@ export default function Home() {
           </div>
           <div>
             {
-              rate!=''?'Rate:'+ rate:''
+              rate!=''?'Rate: '+ rate:''
             }
           </div>
         </Stack>
