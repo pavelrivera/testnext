@@ -22,8 +22,8 @@ export default function Home() {
 
   const classes = useStyles();
   const [amount, setAmount] = useState('');
-  const [from, setFrom] = useState(null);
-  const [to, setTo] = useState(null);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
   const [result, setResult] = useState('');
   const [rate, setRate] = useState('');
   const [symbols, setSymbols] = useState(null);
@@ -76,7 +76,7 @@ export default function Home() {
 
   const handleClickConvert = () => {
     
-    if(to!=null && from!=null)
+    if(to!='' && from!='')
     {
       //const urlfetch= `${url_convert}&from=${from}&to=${to}&amount=${amount}`;
       setLoading(true);
