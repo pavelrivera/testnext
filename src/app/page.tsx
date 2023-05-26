@@ -53,8 +53,8 @@ export default function Home() {
         })
         .catch((err) => {
           setError(err.message);
-          setFrom(null);
-          setTo(null);
+          setFrom('');
+          setTo('');
         })
         .finally(() => {
           setLoading(false);
@@ -115,8 +115,8 @@ export default function Home() {
           })
           .catch((err) => {
             setError(err.message);
-            setFrom(null);
-            setTo(null);
+            setFrom('');
+            setTo('');
           })
           .finally(() => {
             setLoading(false);
