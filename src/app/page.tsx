@@ -21,14 +21,14 @@ const Button = styled(MuiButton)((props) => ({
 export default function Home() {
 
   const classes = useStyles();
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(1);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
-  const [result, setResult] = useState('');
-  const [rate, setRate] = useState('');
-  const [symbols, setSymbols] = useState(null);
+  const [result, setResult] = useState(0);
+  const [rate, setRate] = useState(0);
+  const [symbols, setSymbols] = useState<any>('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
   const ENDPOINT_URL='http://api.exchangeratesapi.io/v1';
   const ENDPOINT_ACCESSKEY='7227d246704ce3ee8e345f4137819b14';
@@ -38,13 +38,13 @@ export default function Home() {
   
 
   useEffect(() => {
-    fetch(`${url_allsymbols}`)
+    fetch(url_allsymbols)
         .then((response) => response.json())
         .then((data) => {
           if(data.success)
           {
             setSymbols(data.symbols);
-            setError(null);
+            setError('');
           }
           else
           {
@@ -59,19 +59,19 @@ export default function Home() {
         .finally(() => {
           setLoading(false);
         });
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
-  const handleChangeFrom = (event: SelectChangeEvent) => {
-    setFrom(event.target.value);
+  const handleChangeFrom = (value: string) => {
+    setFrom(value);
   };
 
-  const handleChangeTo = (event: SelectChangeEvent) => {
-    setTo(event.target.value);
+  const handleChangeTo = (value: string) => {
+    setTo(value);
   };
 
-  const handleChangeAmount = (event) => {
-      setAmount(event.target.value);
+  const handleChangeAmount = (value: string) => {
+      setAmount(parseInt(value));
   };
 
   const handleClickConvert = () => {
@@ -106,7 +106,7 @@ export default function Home() {
 
               setResult(v2);
               setRate(vrate);
-              setError(null);
+              setError('');
             }
             else
             {
@@ -141,7 +141,7 @@ export default function Home() {
             label="Amount" 
             required
             className={classes.form}
-            onChange={handleChangeAmount}
+            onChange={(e) => handleChangeAmount(e.target.value)}
           />
           <FormControl className={classes.form}>
             <InputLabel id="lfrom">From</InputLabel>
@@ -150,7 +150,7 @@ export default function Home() {
               id="sfrom"
               value={from}
               label="From"
-              onChange={handleChangeFrom}
+              onChange={(e) => handleChangeFrom(e.target.value)}
             >
               
               {symbols &&
@@ -166,7 +166,7 @@ export default function Home() {
             id="sto"
             value={to}
             label="To"
-            onChange={handleChangeTo}
+            onChange={(e) => handleChangeTo(e.target.value)}
           >
             {symbols &&
                 Object.keys(symbols).map(id => (
@@ -177,11 +177,13 @@ export default function Home() {
           
           <Button variant="contained" onClick={handleClickConvert}>Convert</Button>
           <div>
-            Result: {result}
+            {
+              result!=0?'Result: '+ result:''
+            }
           </div>
           <div>
             {
-              rate!=''?'Rate: '+ rate:''
+              rate!=0?'Rate: '+ rate:''
             }
           </div>
         </Stack>
