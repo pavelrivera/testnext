@@ -30,7 +30,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const ENDPOINT_URL='https://api.exchangeratesapi.io/v1';
+  const ENDPOINT_URL='http://api.exchangeratesapi.io/v1';
   const ENDPOINT_ACCESSKEY='7227d246704ce3ee8e345f4137819b14';
 
   const url_allsymbols = `${ENDPOINT_URL}/symbols?access_key=${ENDPOINT_ACCESSKEY}`;
